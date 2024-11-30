@@ -1,12 +1,6 @@
-﻿using NUnit.Framework;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Implementing_Specflow_TurnUpPortal.Pages
 {
@@ -55,16 +49,39 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             // Go to the last page of the grid and wait until the element is visible
             IWebElement goToLastPage = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")));
             goToLastPage.Click();
-
-            Thread.Sleep(3000);
-
-            // Find last element
-            IWebElement findElement = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-
-            Assert.That(findElement.Text == "N-1", "Time record not created successfully. Test Failed");
         }
 
-        public void EditTimeRecord(IWebDriver driver)
+        public string GetCode(IWebDriver driver)
+        {
+            IWebElement newCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            return newCode.Text;
+        }
+
+        public string GetDescription(IWebDriver driver)
+        {
+            IWebElement newDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            return newDescription.Text;
+        }
+
+        public string GetPrice(IWebDriver driver)
+        {
+            IWebElement newPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[4]"));
+            return newPrice.Text;
+        }
+
+        public string GetEditedCode(IWebDriver driver)
+        {
+            IWebElement editedCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            return editedCode.Text;
+        }
+
+        public string GetEditedDescription(IWebDriver driver)
+        {
+            IWebElement editedDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            return editedDescription.Text;
+        }
+
+        public void EditTimeRecord(IWebDriver driver, string code, string description)
         {
             Thread.Sleep(2000);
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
@@ -92,12 +109,12 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             // Edit the Code
             IWebElement editCodeTextBox = driver.FindElement(By.Id("Code"));
             editCodeTextBox.Clear();
-            editCodeTextBox.SendKeys("Edited N-1");
+            editCodeTextBox.SendKeys(code);
 
             // Edit description
             IWebElement editDescription = driver.FindElement(By.Id("Description"));
             editDescription.Clear();
-            editDescription.SendKeys("Edited N-1 Description");
+            editDescription.SendKeys(description);
 
             // Click on Edit Price Text Box
             IWebElement clickPriceOverlap = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
@@ -123,9 +140,9 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             IWebElement goToLastPage = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")));
             goToLastPage.Click();
 
-            IWebElement getLastRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+           // IWebElement getLastRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
 
-            Assert.That(getLastRecord.Text == "Edited N-1", "Time record not updated successfully. Test Failed");
+            //Assert.That(getLastRecord.Text == "Edited N-1", "Time record not updated successfully. Test Failed");
         }
 
         public void DeleteTimeRecord(IWebDriver driver)
@@ -150,9 +167,9 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             Thread.Sleep(1000);
             IWebElement moveToLastRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
 
-            Assert.That(moveToLastRecord.Text != "Edited N-1", "Time record is not deleted successfully. Test Failed");
+            //Assert.That(moveToLastRecord.Text != "Edited N-1", "Time record is not deleted successfully. Test Failed");
 
-            Thread.Sleep(1000);
+           // Thread.Sleep(1000);
         }
 
     }
