@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Implementing_Specflow_TurnUpPortal.Utilities;
+using Implementing_Specflow_TurnUpPortal.XPaths;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
@@ -8,7 +10,7 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
     {
         public void CreateTimeRecord(IWebDriver driver)
         {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            // WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
 
             // Click on Create New Button
             IWebElement createNewButton = driver.FindElement(By.XPath("//*[@id=\"container\"]/p/a"));
@@ -18,9 +20,9 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             IWebElement typeCodeDropdown = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[1]/div/span[1]/span/span[2]/span"));
             typeCodeDropdown.Click();
 
+            Wait.WaitToBeVisible(driver, "XPATH", TM_XPaths.typeCode, 5);
             // Applying Selenium Wait
-            IWebElement timeOption = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"TypeCode_listbox\"]/li[2]")));
-
+            IWebElement timeOption = driver.FindElement(By.XPath(TM_XPaths.typeCode));
             // Choose Time as an option for the Type Code
             timeOption.Click();
 
@@ -46,8 +48,9 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             IWebElement saveButton = driver.FindElement(By.Id("SaveButton"));
             saveButton.Click();
 
+            Wait.WaitToBeVisible(driver, "XPATH", TM_XPaths.lastPage, 2);
             // Go to the last page of the grid and wait until the element is visible
-            IWebElement goToLastPage = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")));
+            IWebElement goToLastPage = driver.FindElement(By.XPath(TM_XPaths.lastPage));
             goToLastPage.Click();
         }
 
@@ -84,10 +87,10 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
         public void EditTimeRecord(IWebDriver driver, string code, string description)
         {
             Thread.Sleep(2000);
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-
+            // WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            Wait.WaitToBeVisible(driver, "XPATH", TM_XPaths.lastPage, 3);
             // Go to the last page of the grid and wait until element is loaded
-            IWebElement navigateToLastPage = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")));
+            IWebElement navigateToLastPage = driver.FindElement(By.XPath(TM_XPaths.lastPage));
             navigateToLastPage.Click();
 
             // IWebElement navigateToLastRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
@@ -101,7 +104,8 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             typeCodeDropDown.Click();
 
             // Applying Selenium Wait
-            IWebElement materialSelection = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"TypeCode_listbox\"]/li[1]")));
+            Wait.WaitToBeVisible(driver, "XPATH", TM_XPaths.materialDropDown, 3);
+            IWebElement materialSelection = driver.FindElement(By.XPath(TM_XPaths.materialDropDown));
 
             // Change the value of the drop down to Material
             materialSelection.Click();
@@ -137,10 +141,11 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
             clickSaveButton.Click();
 
             // Go to the last page of the grid and wait until element is loaded
-            IWebElement goToLastPage = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")));
+            Wait.WaitToBeVisible(driver, "XPATH", TM_XPaths.lastPage, 2);
+            IWebElement goToLastPage = driver.FindElement(By.XPath(TM_XPaths.lastPage));
             goToLastPage.Click();
 
-           // IWebElement getLastRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            // IWebElement getLastRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
 
             //Assert.That(getLastRecord.Text == "Edited N-1", "Time record not updated successfully. Test Failed");
         }
@@ -148,17 +153,19 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
         public void DeleteTimeRecord(IWebDriver driver)
         {
             Thread.Sleep(2000);
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            //  WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
 
             // Go to the last page of the grid and wait until element is loaded
-            IWebElement navigateToLastPage = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")));
+            Wait.WaitToBeVisible(driver, "XPATH", TM_XPaths.lastPage, 3);
+            IWebElement navigateToLastPage = driver.FindElement(By.XPath(TM_XPaths.lastPage));
             navigateToLastPage.Click();
 
             IWebElement deleteButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
             deleteButton.Click();
 
             // Applying Selenium Wait
-            // WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
             IAlert alert = wait.Until(ExpectedConditions.AlertIsPresent());
 
             // Handle the alert (Click OK)
@@ -169,7 +176,7 @@ namespace Implementing_Specflow_TurnUpPortal.Pages
 
             //Assert.That(moveToLastRecord.Text != "Edited N-1", "Time record is not deleted successfully. Test Failed");
 
-           // Thread.Sleep(1000);
+            // Thread.Sleep(1000);
         }
 
     }
